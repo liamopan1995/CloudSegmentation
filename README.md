@@ -1,99 +1,57 @@
-# patchwork-plusplus-ros
+# CLoud Segmentation of stems and ground especially for SLAM in forestry environments
 
-This is ROS package of Patchwork++ (@ IROS'22), which is a fast and robust ground segmentation method.
+A modified version of Patchworkpp with additional code for Stem Segmentation
 
-<p align="center"><img src=pictures/patchwork++.gif alt="animated" /></p>
+## Introduction
 
-> If you are not familiar with ROS, please visit the [original repository][patchwork++link].
+This project is an extension of the Patchworkpp library, which provides ground segmentation functionality. In addition to ground segmentation, this modified version includes code that enables the segmentation of tree stems or trunks.
 
-> If you follow the [repository][patchwork++link], you can run Patchwork++ in Python and C++ easily.
+The original Patchworkpp library can be found at [Patchwork++ ROS](https://github.com/original_repository_link). Please refer to the original repository for more information about Patchworkpp.
 
-[patchwork++link]: https://github.com/url-kaist/patchwork-plusplus
+## Features
 
-## :open_file_folder: What's in this repository
+- Ground segmentation: Utilize Patchworkpp's ground segmentation functionality to identify and extract ground points from a point cloud.
+- Stem segmentation: Build upon Patchworkpp to include code that can extract tree stems or trunks from the point cloud data.
 
-* ROS based Patchwork source code ([patchworkpp.hpp][codelink])
-* Demo launch file ([demo.launch][launchlink]) with sample rosbag file. You can execute Patchwork++ simply!
+## Getting Started
 
-[codelink]: https://github.com/url-kaist/patchwork-plusplus-ros/blob/master/include/patchworkpp/patchworkpp.hpp
-[launchlink]: https://github.com/url-kaist/patchwork-plusplus-ros/blob/master/launch/demo.launch
+To get started with this project, follow these steps:
 
-## :package: Prerequisite packages
-You may need to install ROS, PCL, Eigen, ...
+1. Clone the repository:
 
-## :gear: How to build Patchwork++
-To build Patchwork++, you can follow below codes.
+place it under /catkin_ws/src
+  <pre>
+cd ~/catkin_ws
+git clone
+  </pre>
 
-```bash
-$ mkdir -p ~/catkin_ws/src
-$ cd ~/catkin_ws
-$ catkin build # or catkin_make
-```
+2. Install the required dependencies. 
+PCL, ROS, Eigen
+3. Build the project:
+  <pre>
+cd ~/catkin_ws
+catkin_make
+  </pre>
 
-## :runner: To run the demo codes
-There is a demo which executes Patchwork++ with sample rosbag file. You can download a sample file with the following command.
+5. Run the application:
+  <pre>
+cd ~/catkin_ws
+source devel/setup.bash
+roslaunch patchworkpp CloudSegmentation.launch
+  </pre>
 
-> For the sample rosbag data, I utilizes [semantickitti2bag](https://github.com/amslabtech/semantickitti2bag) package.
+## Usage
 
-```bash
-$ wget https://urserver.kaist.ac.kr/publicdata/patchwork++/kitti_00_sample.bag
-```
-> If you have any trouble to download the file by the above command, please click [here][kitti_sample_link] to download the file directly.
 
-[kitti_sample_link]: https://urserver.kaist.ac.kr/publicdata/patchwork++/kitti_00_sample.bag
+## License
 
-> The rosbag file is based on the [KITTI][kittilink] dataset. The bin files are merged into the rosbag file format.
+ no license has been specified yet. However, it is subjected to the license in [patchworkpp ros](https://github.com/original_repository_link).
 
-> The sample file contains LiDAR sensor data only.
+## Acknowledgments
 
-[kittilink]: http://www.cvlibs.net/datasets/kitti/raw_data.php
+This project is built upon the work of the original Patchworkpp library. Thanks to the contributors of Patchworkpp for their valuable contributions.
 
-Then, you can run demo as follows.
 
-```bash
-# Start Patchwork++
-$ roslaunch patchworkpp demo.launch
-# Start the bag file
-$ rosbag play kitti_00_sample.bag
-```
 
-## :pushpin: TODO List
-- [ ] Update additional demo codes processing data with .bin file format
-- [ ] Generalize point type in the source code
-- [ ] Add visualization result of demo codes in readme
 
-## Citation
-If you use our codes, please cite our [paper][patchwork++arXivLink].
-
-In addition, you can also check the paper of our baseline(Patchwork) [here][patchworkarXivlink].
-
-[patchwork++arXivLink]: https://arxiv.org/abs/2207.11919
-[patchworkarXivlink]: https://arxiv.org/abs/2108.05560
-
-```
-@inproceedings{lee2022patchworkpp,
-    title={{Patchwork++: Fast and robust ground segmentation solving partial under-segmentation using 3D point cloud}},
-    author={Lee, Seungjae and Lim, Hyungtae and Myung, Hyun},
-    booktitle={Proc. IEEE/RSJ Int. Conf. Intell. Robots Syst.},
-    year={2022},
-    note={{Submitted}} 
-}
-```
-```
-@article{lim2021patchwork,
-    title={Patchwork: Concentric Zone-based Region-wise Ground Segmentation with Ground Likelihood Estimation Using a 3D LiDAR Sensor},
-    author={Lim, Hyungtae and Minho, Oh and Myung, Hyun},
-    journal={IEEE Robotics and Automation Letters},
-    year={2021}
-}
-```
-
-## :postbox: Contact
-If you have any question, don't be hesitate let us know!
-
-* [Seungjae Lee][sjlink] :envelope: (sj98lee at kaist.ac.kr)
-* [Hyungtae Lim][htlink] :envelope: (shapelim at kaist.ac.kr)
-
-[sjlink]: https://github.com/seungjae24
-[htlink]: https://github.com/LimHyungTae
 
