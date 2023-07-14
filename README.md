@@ -21,8 +21,8 @@ To get started with this project, follow these steps:
 
 place it under /catkin_ws/src
   <pre>
-cd ~/catkin_ws
-git clone
+cd ~/catkin_ws/src
+git clone ...
   </pre>
 
 2. Install the required dependencies. 
@@ -38,6 +38,7 @@ catkin_make
 cd ~/catkin_ws
 source devel/setup.bash
 roslaunch patchworkpp CloudSegmentation.launch
+rosbag play ...  ( pointcloud topic has to be /velodyne_points for present)
   </pre>
 
 ## Usage
