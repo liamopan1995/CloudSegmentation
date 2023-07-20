@@ -30,6 +30,7 @@ class cloudSegmentation {
     // debugging use only 
     ros::Publisher pubDebug;
     ros::Subscriber subLaserCloud;
+    // end of debugging use only
 
     pcl::PointCloud<PointType>::Ptr laserCloudIn;
     pcl::PointCloud<PointType>::Ptr groundCloud;
@@ -125,10 +126,9 @@ class cloudSegmentation {
         *laserCloudIn = *outputCloud;
         // now it is working well
     }
-
-    void removeByIntensity(){
+    void removeByIntensity(pcl::PointCloud<PointType>::Ptr& inputCloud,float intensityThreshold=8){
         // Set the intensity threshold for outlier removal
-        float intensityThreshold = 8;  // started from 100, cut to half after each iteration 24 was the optimal when input topic is velodyne_points
+        // started from 100, cut to half after each iteration 24 was the optimal when input topic is velodyne_points
         
         // Create the condition object
         pcl::ConditionAnd<PointType>::Ptr intensityCondition (new pcl::ConditionAnd<PointType> ());
@@ -137,19 +137,22 @@ class cloudSegmentation {
 
         // Create the conditional removal filter
         pcl::ConditionalRemoval<PointType> cr;
-        cr.setInputCloud(nonGroundCloud);
+        cr.setInputCloud(inputCloud);
+        //cr.setInputCloud(nonGroundCloud);
         cr.setCondition(intensityCondition);
         cr.setKeepOrganized(true); // Set to true if you want to preserve the structure of the input cloud
 
         // Create a place holder then apply the intensity threshold condition to remove outliers
         pcl::PointCloud<PointType>::Ptr filteredIntensity(new pcl::PointCloud<PointType>);
         cr.filter(*filteredIntensity);
-        nonGroundCloud = filteredIntensity;
+        //nonGroundCloud = filteredIntensity;
+        inputCloud = filteredIntensity;
 
         // this part works well too
     }
 
-    void projectTo2D(pcl::PointCloud<PointType>::Ptr& nonGroundCloud){
+    void projectTo2D(){
+    // void projectTo2D(pcl::PointCloud<PointType>::Ptr& nonGroundCloud){
         for (auto& point : nonGroundCloud->points) {
         point.intensity = point.z;
         point.z = 0.0;
@@ -162,28 +165,28 @@ class cloudSegmentation {
         pcl::removeNaNFromPointCloud(*nonGroundCloud, *nonGroundCloud, indices);
     }
 
-    void radiusOutlierRemoval(){
+    void radiusOutlierRemoval(int radius=9){
         pcl::RadiusOutlierRemoval<pcl::PointXYZI> filter;
         filter.setInputCloud(nonGroundCloud);
         filter.setRadiusSearch(0.32); 
-        filter.setMinNeighborsInRadius(9); 
+        filter.setMinNeighborsInRadius(radius); // Tune this 
         pcl::PointCloud<pcl::PointXYZI>::Ptr filteredRadiusOutlierRemoval(new pcl::PointCloud<pcl::PointXYZI>);
         filter.filter(*filteredRadiusOutlierRemoval);
         nonGroundCloud = filteredRadiusOutlierRemoval;
     }
-
-    void projectTo3D(pcl::PointCloud<PointType>::Ptr& nonGroundCloud){
+    void projectTo3D(){
+    //void projectTo3D(pcl::PointCloud<PointType>::Ptr& nonGroundCloud){
         for (auto& point : nonGroundCloud->points) {
         point.z = point.intensity;
         }
     }
 
     void stemSeg(){
-        removeByIntensity();
-        projectTo2D(nonGroundCloud);
+        removeByIntensity(nonGroundCloud);
+        projectTo2D();
         removeNan();
         radiusOutlierRemoval();
-        projectTo3D(nonGroundCloud);
+        projectTo3D();
     }
 
     void publishCloud(){
@@ -211,14 +214,22 @@ class cloudSegmentation {
     void cloudHandler(const sensor_msgs::PointCloud2ConstPtr& laserCloudMsg){
 
         copyPointCloud(laserCloudMsg);
-        voxelFilter();
-        removePointsInBox();
-        // how about at first implement one only relying on patchwork++ ros class?
-        // this causes some modifys above in constructor-->>
-        PatchworkppGroundSeg->estimate_ground(*laserCloudIn,*groundCloud,*nonGroundCloud,time_taken); //see if import from patchwork++ possible
-        // after debugging , goundCloud, and nonGroundCloud are containning expected point clouds    
-        stemSeg();
 
+        // Trying with intensity filter and tuninng it started from 9 :
+        // We were applying this para=9 to discard points that are less proble
+        // to be tree stems at the purely tree trunk segmentation, therefore
+        // the para should be less then 9 at here.  started with :7 ,6 ,5
+        // removeByIntensity(laserCloudIn,3);
+        // Result: removebyintensity doe not have any noticeable improvement on the result
+        // and will potentially  slow down the computation. so it is better not to have it here neither.
+
+        // Trying with voxel filter removed 
+        // voxelFilter();  
+        // Confirmed:[It is better not to has voxel filter here]
+
+        removePointsInBox();
+        PatchworkppGroundSeg->estimate_ground(*laserCloudIn,*groundCloud,*nonGroundCloud,time_taken); 
+        stemSeg();
         publishCloud();
 
     }
