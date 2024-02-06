@@ -27,8 +27,10 @@ git clone ...
 
 2. Install the required dependencies. 
 PCL, ROS, Eigen，Sophus, G2O
-for Sophus, this specific version might be necessary [download here](https://drive.google.com/file/d/1t2P_DoQ9s0Q0I5ukexdbTpXXRIuBt62x/view?usp=drive_link)
-for G2O, this specific version might be necessary [download here](https://drive.google.com/file/d/1Q-nvxnD4tugpC4kOWcjvvKKamVvYKRw4/view?usp=drive_link)
+For Sophus, this specific version might be needed [download here](https://drive.google.com/file/d/1t2P_DoQ9s0Q0I5ukexdbTpXXRIuBt62x/view?usp=drive_link)
+
+For G2O, this specific version might be needed [download here](https://drive.google.com/file/d/1Q-nvxnD4tugpC4kOWcjvvKKamVvYKRw4/view?usp=drive_link)
+
 4. Build the project:
   <pre>
 cd ~/catkin_ws
