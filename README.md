@@ -26,8 +26,10 @@ git clone ...
   </pre>
 
 2. Install the required dependencies. 
-PCL, ROS, Eigen
-3. Build the project:
+PCL, ROS, Eigen，Sophus, G2O
+for Sophus, this specific version might be necessary [download here](https://drive.google.com/file/d/1t2P_DoQ9s0Q0I5ukexdbTpXXRIuBt62x/view?usp=drive_link)
+for G2O, this specific version might be necessary [download here](https://drive.google.com/file/d/1Q-nvxnD4tugpC4kOWcjvvKKamVvYKRw4/view?usp=drive_link)
+4. Build the project:
   <pre>
 cd ~/catkin_ws
 catkin_make
@@ -41,8 +43,8 @@ roslaunch patchworkpp CloudSegmentation.launch
 rosbag play ...  ( pointcloud topic has to be /velodyne_points for present)
   </pre>
 
-## Usage
-
+## Operation Demonstration 
+[Video](https://drive.google.com/file/d/1N1WgAAsGCnm57edv6hc4fqz94HvVkzQY/view?usp=sharing)
 
 ## License
 
